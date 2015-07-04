@@ -36,11 +36,11 @@
 			<version>2.1.6</version>
 		</dependency>
 
-		<dependency>
+	<!-- 	<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-transport-native-epoll</artifactId>
 			<version>4.0.27.Final</version>
-		</dependency>
+		</dependency> -->
 
 	</dependencies>
 
