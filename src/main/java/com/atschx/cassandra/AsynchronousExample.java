@@ -25,7 +25,7 @@ public class AsynchronousExample extends SmartClient {
 		ResultSetFuture results = client.getRows();
 		for (Row row : results.getUninterruptibly()) {
 			System.out.printf("%s: %s / %s\n", row.getString("artist"),
-					row.getString("title"), row.getString("album"));
+					row.getString(" "), row.getString("album"));
 		}
 		client.dropSchema("simplex");
 		client.close();
