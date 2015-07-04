@@ -126,5 +126,17 @@
 		public void setClientType(Integer clientType) {
 			this.clientType = clientType;
 		}
+
+		@Override
+		public String toString() {
+			return "IMProtocolStatisticModel [id=" + id + ", uid=" + uid
+					+ ", sid=" + sid + ", ipAddress=" + ipAddress
+					+ ", occuredOn=" + occuredOn + ", seq=" + seq
+					+ ", channel=" + channel + ", tag=" + tag + ", type="
+					+ type + ", packet=" + packet + ", bytes=" + bytes
+					+ ", clientVersion=" + clientVersion + ", clientType="
+					+ clientType + "]";
+		}
+		
 	
 	}
