@@ -3,10 +3,8 @@ package com.atschx.cassandra.sample;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
-import java.util.UUID;
 
 import org.junit.Test;
-
 
 public class IMProtocolStatisticModelTest {
 
@@ -15,8 +13,6 @@ public class IMProtocolStatisticModelTest {
 		
 		IMProtocolStatisticModel imProtocolStatisticModel = new IMProtocolStatisticModel();
 
-		imProtocolStatisticModel.setId(UUID.randomUUID());
-		
 		imProtocolStatisticModel.setUid(13141988);
 		imProtocolStatisticModel.setSid(1292L);
 		try {

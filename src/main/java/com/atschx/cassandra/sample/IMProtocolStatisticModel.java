@@ -1,12 +1,9 @@
 	package com.atschx.cassandra.sample;
 	
 	import java.net.InetAddress;
-	import java.util.Date;
-	import java.util.UUID;
+import java.util.Date;
 	
 	public class IMProtocolStatisticModel {
-	
-		private UUID id;
 	
 		private Integer uid;
 		private Long sid;
@@ -22,14 +19,6 @@
 	
 		private String clientVersion;
 		private Integer clientType;
-	
-		public UUID getId() {
-			return id;
-		}
-	
-		public void setId(UUID id) {
-			this.id = id;
-		}
 	
 		public Integer getUid() {
 			return uid;
@@ -129,7 +118,7 @@
 
 		@Override
 		public String toString() {
-			return "IMProtocolStatisticModel [id=" + id + ", uid=" + uid
+			return "IMProtocolStatisticModel [ uid=" + uid
 					+ ", sid=" + sid + ", ipAddress=" + ipAddress
 					+ ", occuredOn=" + occuredOn + ", seq=" + seq
 					+ ", channel=" + channel + ", tag=" + tag + ", type="
