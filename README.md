@@ -7,10 +7,9 @@
 
 > 创建这个表时,看上去有模有样,然则针对Cassdanra而言,这其实是灾难.
 
-```
-cqlsh:statistic> desc schema;
-
-CREATE KEYSPACE statistic WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '3'}  AND durable_writes = true;
+``` cqlsh
+CREATE KEYSPACE statistic 
+WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '3'}  AND durable_writes = true;
 
 CREATE TABLE statistic.protocols (
     uid int,
@@ -26,20 +25,7 @@ CREATE TABLE statistic.protocols (
     tag int,
     type int,
     PRIMARY KEY (uid, sid, ip_address, occured_on, bytes)
-) WITH CLUSTERING ORDER BY (sid ASC, ip_address DESC, occured_on ASC, bytes DESC)
-    AND bloom_filter_fp_chance = 0.01
-    AND caching = '{"keys":"ALL", "rows_per_partition":"NONE"}'
-    AND comment = ''
-    AND compaction = {'min_threshold': '4', 'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32'}
-    AND compression = {'sstable_compression': 'org.apache.cassandra.io.compress.LZ4Compressor'}
-    AND dclocal_read_repair_chance = 0.1
-    AND default_time_to_live = 0
-    AND gc_grace_seconds = 864000
-    AND max_index_interval = 2048
-    AND memtable_flush_period_in_ms = 0
-    AND min_index_interval = 128
-    AND read_repair_chance = 0.0
-    AND speculative_retry = '99.0PERCENTILE';
+) WITH CLUSTERING ORDER BY (sid ASC, ip_address DESC, occured_on ASC, bytes DESC);
 ```
 
 > PS:示例代码在插入数据时设置了TTL 20S. 
