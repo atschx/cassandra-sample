@@ -54,15 +54,26 @@ public class Application {
 		tableStringBuff.append("client_type").append(" int").append(",");
 
 		//组合主键
-		tableStringBuff.append("PRIMARY KEY").append("(").append("uid")
-				.append(",").append("sid").append(",").append("ip_address")
-				.append(",").append("occured_on").append(",").append("bytes")
-				.append(")");
+//		tableStringBuff.append("PRIMARY KEY").append("(").append("uid")
+//				.append(",").append("sid").append(",").append("ip_address")
+//				.append(",").append("occured_on").append(",").append("bytes")
+//				.append(")");
 
-
+		tableStringBuff.append("PRIMARY KEY");
+		tableStringBuff.append("(");
+		tableStringBuff.append("uid").append(",");
+		tableStringBuff.append("channel").append(",");
+		tableStringBuff.append("bytes").append(",");
+		tableStringBuff.append("occured_on");
+		tableStringBuff.append(")");
 		tableStringBuff.append(" )");
-		tableStringBuff
-				.append("WITH CLUSTERING ORDER BY (sid ASC,ip_address DESC,occured_on ASC,bytes DESC)");
+		
+//		tableStringBuff
+//				.append("WITH CLUSTERING ORDER BY (sid ASC,ip_address DESC,occured_on ASC,bytes DESC)");
+		
+		tableStringBuff.append("WITH CLUSTERING ORDER BY (channel ASC, bytes DESC, occured_on ASC)");
+		
+
 		tableStringBuff.append(";");
 
 		session.execute(keyspaceBuff.toString());
@@ -79,7 +90,7 @@ public class Application {
 		cqlBuff.append("(uid, sid, ip_address, occured_on,seq,channel,tag,type,packet,bytes,client_version,client_type) ");
 		cqlBuff.append("VALUES");
 		cqlBuff.append("(?,?,?,?,?,?,?,?,?,?,?,?)");
-		cqlBuff.append(" USING TTL 20");//20S数据过期
+//		cqlBuff.append(" USING TTL 20");//20S数据过期
 		cqlBuff.append(";");
 
 		PreparedStatement statement = session.prepare(cqlBuff.toString());
@@ -88,7 +99,7 @@ public class Application {
 		for (int i = 0; i < 30; i++) {
 			IMProtocolStatisticModel imProtocolStatisticModel = new IMProtocolStatisticModel();
 
-			imProtocolStatisticModel.setUid(13141988 + i);
+			imProtocolStatisticModel.setUid(13141988);
 			imProtocolStatisticModel.setSid(System.currentTimeMillis());
 			try {
 				imProtocolStatisticModel
@@ -99,7 +110,7 @@ public class Application {
 			}
 			imProtocolStatisticModel.setOccuredOn(new Date());
 			imProtocolStatisticModel.setSeq(1);
-			imProtocolStatisticModel.setChannel(1);
+			imProtocolStatisticModel.setChannel(i/5);
 			imProtocolStatisticModel.setTag(2);
 			imProtocolStatisticModel.setType(3);
 			imProtocolStatisticModel
@@ -112,7 +123,7 @@ public class Application {
 
 			protocolStatisticModels.add(imProtocolStatisticModel);
 			try {
-				Thread.sleep(10);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
