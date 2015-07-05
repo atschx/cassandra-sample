@@ -1,7 +1,6 @@
 # cassandra-sample
 
-> 参考: datastax的[java-driver](http://docs.datastax.com/en/developer/java-driver/2.1/java-driver/whatsNew2.html)
-
+> cassandra 2.x以后推荐使用native的驱动,性能提升50%.更多内容可参考: datastax的[java-driver](http://docs.datastax.com/en/developer/java-driver/2.1/java-driver/whatsNew2.html)
 
 ## try it ?
 
