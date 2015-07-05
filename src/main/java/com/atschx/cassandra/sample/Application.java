@@ -53,10 +53,12 @@ public class Application {
 		tableStringBuff.append("client_version").append(" varchar").append(",");
 		tableStringBuff.append("client_type").append(" int").append(",");
 
+		//组合主键
 		tableStringBuff.append("PRIMARY KEY").append("(").append("uid")
 				.append(",").append("sid").append(",").append("ip_address")
 				.append(",").append("occured_on").append(",").append("bytes")
 				.append(")");
+
 
 		tableStringBuff.append(" )");
 		tableStringBuff
@@ -76,44 +78,52 @@ public class Application {
 		cqlBuff.append(KEYSPACE_NAME).append(".").append(TABLE_NAME);
 		cqlBuff.append("(uid, sid, ip_address, occured_on,seq,channel,tag,type,packet,bytes,client_version,client_type) ");
 		cqlBuff.append("VALUES");
-		cqlBuff.append(" (?,?,?,?,?,?,?,?,?,?,?,?);");
+		cqlBuff.append("(?,?,?,?,?,?,?,?,?,?,?,?)");
+		cqlBuff.append(" USING TTL 20");//20S数据过期
 		cqlBuff.append(";");
 
 		PreparedStatement statement = session.prepare(cqlBuff.toString());
 
 		List<IMProtocolStatisticModel> protocolStatisticModels = new ArrayList<IMProtocolStatisticModel>();
-			for (int i = 0; i < 3; i++) {
-				IMProtocolStatisticModel imProtocolStatisticModel = new IMProtocolStatisticModel();
-				
-				imProtocolStatisticModel.setUid(13141988+i);
-				imProtocolStatisticModel.setSid(System.currentTimeMillis());
-				try {
-					imProtocolStatisticModel
-					.setIpAddress(InetAddress.getByAddress(new byte[] {
-							(byte) 192, (byte) 168, 1, 1 }));
-				} catch (UnknownHostException e) {
-					e.printStackTrace();
-				}
-				imProtocolStatisticModel.setOccuredOn(new Date());
-				imProtocolStatisticModel.setSeq(1);
-				imProtocolStatisticModel.setChannel(1);
-				imProtocolStatisticModel.setTag(2);
-				imProtocolStatisticModel.setType(3);
+		for (int i = 0; i < 30; i++) {
+			IMProtocolStatisticModel imProtocolStatisticModel = new IMProtocolStatisticModel();
+
+			imProtocolStatisticModel.setUid(13141988 + i);
+			imProtocolStatisticModel.setSid(System.currentTimeMillis());
+			try {
 				imProtocolStatisticModel
-				.setPacket("{header:{\"tag\":2,\"type\":3},meta:{}}");
-				imProtocolStatisticModel.setBytes(imProtocolStatisticModel
-						.getPacket().getBytes().length);
-				
-				imProtocolStatisticModel.setClientVersion("1.0.0");
-				imProtocolStatisticModel.setClientType(2);
-				
-				protocolStatisticModels.add(imProtocolStatisticModel);
+						.setIpAddress(InetAddress.getByAddress(new byte[] {
+								(byte) 192, (byte) 168, 1, (byte)(i+1) }));
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
 			}
+			imProtocolStatisticModel.setOccuredOn(new Date());
+			imProtocolStatisticModel.setSeq(1);
+			imProtocolStatisticModel.setChannel(1);
+			imProtocolStatisticModel.setTag(2);
+			imProtocolStatisticModel.setType(3);
+			imProtocolStatisticModel
+					.setPacket("{header:{\"tag\":2,\"type\":3},meta:{}}");
+			imProtocolStatisticModel.setBytes(imProtocolStatisticModel
+					.getPacket().getBytes().length * (i + 2));
+
+			imProtocolStatisticModel.setClientVersion("1.0.0");
+			imProtocolStatisticModel.setClientType(2);
+
+			protocolStatisticModels.add(imProtocolStatisticModel);
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 
 		BatchStatement batch = new BatchStatement();
 		for (IMProtocolStatisticModel imProtocolStatisticModel : protocolStatisticModels) {
 			BoundStatement boundStatement = new BoundStatement(statement);
-			boundStatement.bind(imProtocolStatisticModel.getUid(),
+			
+			boundStatement.bind(
+					imProtocolStatisticModel.getUid(),
 					imProtocolStatisticModel.getSid(),
 					imProtocolStatisticModel.getIpAddress(),
 					imProtocolStatisticModel.getOccuredOn(),
@@ -125,6 +135,7 @@ public class Application {
 					imProtocolStatisticModel.getBytes(),
 					imProtocolStatisticModel.getClientVersion(),
 					imProtocolStatisticModel.getClientType());
+			
 			batch.add(boundStatement);
 		}
 
