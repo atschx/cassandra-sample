@@ -1,7 +1,5 @@
 package com.atschx.cassandra.sample;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Date;
 
 import org.junit.Test;
@@ -15,11 +13,12 @@ public class IMProtocolStatisticModelTest {
 
 		imProtocolStatisticModel.setUid(13141988);
 		imProtocolStatisticModel.setSid(1292L);
-		try {
-			imProtocolStatisticModel.setIpAddress(InetAddress.getByAddress(new byte[]{(byte) 192,(byte) 168,1,1}));
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		imProtocolStatisticModel.setIpAddress("192.168.1.1");
+//		try {
+//			imProtocolStatisticModel.setIpAddress(InetAddress.getByAddress(new byte[]{(byte) 192,(byte) 168,1,1}));
+//		} catch (UnknownHostException e) {
+//			e.printStackTrace();
+//		}
 		imProtocolStatisticModel.setOccuredOn(new Date());
 		imProtocolStatisticModel.setSeq(1);
 		imProtocolStatisticModel.setChannel(1);
